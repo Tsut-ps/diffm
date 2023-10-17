@@ -3,7 +3,7 @@
 リアルタイム計算。
 30フレームごとに描画するようになっている（書き換えれば調整できる）。
 
-![image](https://github.com/Tsut-ps/diffm/assets/73014392/fa76e2a9-0a8b-4a21-bc30-4b56b245f2d5)
+![image](https://github.com/Tsut-ps/diffm/assets/73014392/9d305d27-b9a9-46fd-a404-c967f4a8ddfd)
 
 ## どうして作ったの？
 - AviUtlで差分比較するのが面倒だった
