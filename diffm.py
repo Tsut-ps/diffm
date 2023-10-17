@@ -3,6 +3,8 @@ import numpy as np
 import time
 import matplotlib.pyplot as plt
 
+fps = 30
+
 print("比較動画A: ", end="")
 mov_A = input()
 print("比較動画B: ", end="")
@@ -39,7 +41,7 @@ while (True):
     brightness.append(diff_v_mean)
     
     # 30フレームごとにグラフ描画
-    if (i % 30 == 0):
+    if (i % fps == 0):
         plt.cla()
         plt.ylim(0, 255)
         plt.plot(brightness)
