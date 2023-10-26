@@ -40,7 +40,7 @@ while (True):
     # 配列に追加
     brightness.append(diff_v_mean)
     
-    # 30フレームごとにグラフ描画
+    # 30フレームごとにグラフ更新
     if (i % fps == 0):
         plt.cla()
         plt.ylim(0, 255)
