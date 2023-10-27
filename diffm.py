@@ -11,6 +11,7 @@ args = sys.argv
 mov_A = ""
 mov_B = ""
 interval = 0
+threshold = -1
 
 # 引数があるときに動画を指定
 if (len(args) > 2):
@@ -21,8 +22,14 @@ if (len(args) > 2):
     # 第3引数でinterval指定
     if (len(args) > 3):
         interval = int(args[3])
-    # 引数指定が多すぎるときはエラーを出す
     if (len(args) > 4):
+        threshold = float(args[4])
+        # 0～255以外の値が指定されたときはエラーを出す
+        if not(0 <= threshold <= 255):
+            print("thresholdは0～255の値を指定してください")
+            exit()
+    # 引数指定が多すぎるときはエラーを出す
+    if (len(args) > 5):
         print("引数が多すぎます")
         exit()
 
@@ -46,6 +53,12 @@ if interval <= 0:
     interval = 30
 print(interval)
 
+# 閾値を表示
+print("閾値: ", end="")
+if (threshold == -1):
+    print("設定なし", "\n")
+else:
+    print(threshold, "\n")
 
 # 動画の読み込み
 video1 = cv2.VideoCapture(mov_A)
@@ -55,8 +68,13 @@ brightness = []
 # 開始秒数
 startTime = time.time()
 
+# フレーム番号
 i = 1
+# 差分の最大値
+diff_max = 0
+# 区間内の最大値
 interval_max_brightness = 0
+
 while (True):
     # 動画の1フレームを取得
     ret1, frame1 = video1.read()
@@ -79,14 +97,15 @@ while (True):
     brightness.append(diff_v_mean)
 
     # 最大値を更新
-    interval_max_brightness = max(interval_max_brightness, diff_v_mean)
+    if (interval_max_brightness < diff_v_mean):
+        interval_max_brightness = diff_v_mean
+        diff_max = diff
 
     # 描画間隔ごとに更新
     if (i % interval == 0):
         # グラフをクリアして描画
         plt.cla()
         plt.plot(brightness)
-        plt.plot(interval_max_brightness)
         # グラフのラベルを設定
         plt.xlabel("frame")
         plt.ylabel("brightness")
@@ -94,11 +113,21 @@ while (True):
         plt.pause(0.0001)
         
         # 画像を表示
-        cv2.imshow('diffm', diff)
+        cv2.imshow('diffm', diff_max)
         cv2.waitKey(1)
 
+        threshold_over = ""
+        # 閾値が指定されているときは閾値と比較
+        if (threshold != -1 and interval_max_brightness > threshold):
+            threshold_over = "*"
+            # 画像を保存
+            cv2.imwrite("over/diffm_" + str(i) + ".png", diff_max)
+
         # フレーム番号と区間内の最大値を表示
-        print("frame: <", i, "| brightness:", interval_max_brightness)
+        print("frame: < " + str(i) + " | " + "brightness: " + str(interval_max_brightness), str(threshold_over))
+
+        # diffの初期化
+        diff_max = diff  # 初期化は現在のフレームを使う(エラーを防ぐ)
         interval_max_brightness = 0
 
     i += 1
