@@ -1,5 +1,6 @@
 import cv2
 import sys
+import os
 import numpy as np
 import time
 import matplotlib.pyplot as plt
@@ -49,6 +50,16 @@ if (threshold == -1):
     print("設定なし", "\n")
 else:
     print(threshold, "\n")
+    # overフォルダがなければ作成
+    if os.path.isfile("over"):
+        os.mkdir("over")
+    # ファイルが残っていれば削除するか確認
+    over_len = len(os.listdir("over"))
+    if ((over_len) > 0):
+        print("overフォルダに" + str(over_len) + "ファイル残っています。")
+        exit("中身を削除してから再実行してください。")
+
+
 
 # 動画の読み込み
 video1 = cv2.VideoCapture(mov_A)
