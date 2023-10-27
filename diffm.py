@@ -13,7 +13,9 @@ mov_B = ""
 interval = 0
 threshold = -1
 
-# 引数があるときに動画を指定
+# 引数から動画を指定
+if (len(args) <= 2):
+    exit("引数を2つ以上指定してください")
 if (len(args) > 2):
     # 第1引数で 動画A 指定
     mov_A = args[1]
@@ -26,26 +28,14 @@ if (len(args) > 2):
         threshold = float(args[4])
         # 0～255以外の値が指定されたときはエラーを出す
         if not(0 <= threshold <= 255):
-            print("thresholdは0～255の値を指定してください")
-            exit()
+            exit("thresholdは0～255の値を指定してください")
     # 引数指定が多すぎるときはエラーを出す
     if (len(args) > 5):
-        print("引数が多すぎます")
-        exit()
+        exit("引数が多すぎます")
 
-# 動画Aの情報を表示
-print("比較動画A: ", end="")
-if mov_A == "":
-    mov_A = input() # 未指定時に入力
-else:
-    print(mov_A)
-
-# 動画Bの情報を表示
-print("比較動画B: ", end="")
-if mov_B == "":
-    mov_B = input() # 未指定時に入力
-else:
-    print(mov_B)
+# 動画A/Bのパスを表示
+print("比較動画A: ", mov_A)
+print("比較動画B: ", mov_B)
 
 # 描画間隔を表示
 print("描画間隔(フレーム): ", end="")
