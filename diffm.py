@@ -51,9 +51,8 @@ if (threshold == -1):
 else:
     print(threshold, "\n")
     # overフォルダがなければ作成
-    if os.path.isfile("over"):
-        os.mkdir("over")
-    # ファイルが残っていれば削除するか確認
+    os.makedirs("over", exist_ok=True)
+    # overフォルダ内にファイルが残っていれば削除するか確認
     over_len = len(os.listdir("over"))
     if ((over_len) > 0):
         print("overフォルダに" + str(over_len) + "ファイル残っています。")
